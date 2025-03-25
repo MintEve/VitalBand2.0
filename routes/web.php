@@ -106,26 +106,31 @@ Route::get('/usuarios', function () {
         } 
 });
 
+
 Route::get('/api/registros/{sVital}', function ($sVital) {
     $param1 = session('param1'); // Usuario autenticado
 
-    // Verificar que el signo vital exista en la BD con el nombre correcto
     $signosValidos = ['Spo2', 'Cardiaca', 'Temperatura']; 
-
     if (!in_array($sVital, $signosValidos)) {
         return response()->json(["error" => "Signo vital no válido"], 400);
     }
 
-    // Buscar los registros en la BD
     $registros = DB::connection('mongodb')->table('registros')
         ->where('userName', $param1)
         ->where('sVital', $sVital)
         ->orderBy('fechaDeToma', 'asc')
-        ->get();
+        ->get()
+        ->map(function ($item) {
+            return [
+                'fechaDeToma' => $item->fechaDeToma,
+                'sVital' => $item->sVital,
+                'nivelRegistrado' => [
+                    'promedio' => $item->nivelRegistrado['promedio'],
+                    'maximo' => $item->nivelRegistrado['maximo'],
+                    'minimo' => $item->nivelRegistrado['minimo']
+                ]
+            ];
+        });
 
     return response()->json($registros);
 });
-
-
-
-
