@@ -38,7 +38,7 @@
     </style>
 </head>
 <body>
-    @include('navbar') <!-- Incluye la barra de navegación -->
+    @include('components/navbar') <!-- Incluye la barra de navegación -->
 
     <div class="container">
         <h2>Gráfica de Signos Vitales</h2>
@@ -59,8 +59,8 @@
 
 
         async function cargarGrafica() {
-    const sVital = document.getElementById('sVital').value; // Ahora toma "Cardiaca", "Spo2" o "Temperatura"
-    
+    const sVital = document.getElementById('sVital').value;
+
     try {
         const response = await fetch(`/api/registros/${sVital}`);
         const data = await response.json();
@@ -71,27 +71,32 @@
         }
 
         if (!data.length) {
-            alert(`Este usuario no tiene datos de "${sVital}" para mostrar`);
+            alert(`No hay datos para ${sVital}`);
             return;
         }
 
-        // Graficar los datos correctamente
         const fechas = data.map(registro => registro.fechaDeToma);
         const valores = data.map(registro => registro.nivelRegistrado.promedio);
 
-        if (chart) chart.destroy();
+        if (chart) chart.destroy(); // Borra la gráfica anterior
+
+        // Selección del tipo de gráfico
+        let tipoGrafico = 'line';
+        if (sVital === 'Temperatura') tipoGrafico = 'bar';
+        if (sVital === 'Spo2') tipoGrafico = 'line'; // También puedes probar 'area'
 
         const ctx = document.getElementById('graficaVitales').getContext('2d');
         chart = new Chart(ctx, {
-            type: 'line',
+            type: tipoGrafico,
             data: {
                 labels: fechas,
                 datasets: [{
                     label: `Nivel Promedio - ${sVital}`,
                     data: valores,
-                    borderColor: 'blue',
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 2,
-                    fill: false
+                    fill: sVital === 'Spo2' // Relleno solo para oxigenación
                 }]
             },
             options: {
@@ -108,7 +113,6 @@
         alert("Hubo un error al cargar los datos.");
     }
 }
-
 
 
         // Cargar la gráfica inicial con el primer valor del selector

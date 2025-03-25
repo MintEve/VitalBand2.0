@@ -1,23 +1,46 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ingreso</title>
+    <link rel="stylesheet" href="{{ asset('css/ingresar.css') }}">
+    @include('components/navbar')
+    <title>Iniciar sesión</title>
 </head>
 <body>
-    @include('navbar') <!-- Incluye la barra de navegación -->
+    <div class="login-wrapper">
+        <!-- Sección de bienvenida -->
+        <div class="welcome-container">
+            <h2>¡Hola, Bienvenido!</h2>
+            <p>¿Eres nuevo en Vitalband?</p>
+            <button class="btn-register">Descarga la app</button>
+        </div>
+        <!-- Sección de inicio de sesión -->
+        <div class="login-container">
+            <h1>Iniciar sesión</h1>
+            @csrf
+            <input type="text" placeholder="Username" class="nombreUsuario" required>
+            <input type="password" placeholder="Contraseña" class="password" required>
+            <button type="submit" onclick="sendData()" class="btn-login">Entrar</button>
+            <p class="forgot-password">¿Olvidaste tu contraseña?</p>
+        </div>
+    </div>
+    @include('components/footer')
+</body>
+</html>
 
-  <!-- area de componente propia individual -->
-  <div class="divPrincipal">
-    <h1>Login</h1>
-    <!-- input para ingresar dato  -->
-    <input class="nombreUsuario" placeholder="Nombre usuario"> 
-    <input class="password"  type="password"  placeholder="Contraseña"> 
-
-    <!-- boton para enviar datos a a funcion mediante una promesa  -->
-    <button onclick="sendData()">Entrar</button>
-</div>
+@if(session('error'))
+<script>
+     Swal.fire({
+            icon: 'error',
+            title: '¡Error!',
+            text: "{{ session('error') }}",
+            showConfirmButton: false,
+            timer: 2000
+        });
+</script>
+@endif
 
 <script>
     function sendData() {
@@ -39,17 +62,23 @@
                 param2: contrasena
             })
         })
-        .then(() => {
-            
+        .then((respuesta) => {
+
+            window.location.href = '{{ asset("/usuarios") }}'
+
+           // alert("hola");
             // Redirigir después de guardar los parámetros en la sesión
-            window.location.href = '{{ asset("/usuarios") }}';
+            //window.location.href = '{{ asset("/usuarios") }}';
         });
     }
 </script>
 
 
-</body>
-
-</html>
+<style>
+ /* Aplica el box-sizing solo al navbar importado */
+ * {
+            box-sizing: border-box;
+        }
+</style>
 
 

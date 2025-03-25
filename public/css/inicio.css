@@ -1,0 +1,402 @@
+    /* Reset de estilos */
+* {
+
+  box-sizing: border-box;
+}
+
+/* Estilos generales */
+body {
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  background-color: #f2f7fa; /* Fondo de toda la página */
+  line-height: 1.6;
+}
+
+/* Estilos de la cabecera */
+header {
+  background-color: #f5f5f5;
+  padding: 1rem;
+}
+/* Estilos para la sección .hero */
+.hero {
+  background-color: #f2f7fa; /* Color de fondo */
+  color: #065666; /* Color predeterminado para el texto */
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+/* Estilos para el encabezado h1 dentro de .hero */
+.hero h1 {
+  font-family: "Montserrat", sans-serif; /* Aplicamos la fuente Montserrat */
+  font-size: 4.5rem; /* Cambia el tamaño de la fuente */
+  font-weight: 500; /* Puedes elegir el peso de la fuente: 400, 500, 700, etc. */
+  font-optical-sizing: auto; /* Ajusta el tamaño de la fuente según el dispositivo */
+  color: #284146; /* Cambia el color de las letras */
+  margin-bottom: 1rem; /* Margen inferior */
+}
+
+
+/* Estilos para el párrafo p dentro de .hero */
+.hero p {
+  font-family: 'Tahoma'; /* Cambia la fuente */
+  font-size: 1.3rem; /* Cambia el tamaño de la fuente */
+  color: #4f5b5e; /* Cambia el color de las letras */
+  margin-top: -1ch;
+}
+
+/* Estilos de la sección de características */
+.features {
+  display: flex;
+  justify-content: center;
+  gap: 6rem;
+  padding: 0.5rem 4rem;
+}
+
+.feature {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-align: center;
+  padding: 2rem;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+  font-family: 'Arial', sans-serif;
+}
+/* Card más grande */
+.large-card {
+  flex: 1 1 300px; /* Hace que la tarjeta grande ocupe más espacio */
+  transform: translateY(-30px); /* La tarjeta más grande se desplaza hacia arriba */
+  border-radius: 70px; /* Bordes redondeados */
+  height: 400px; /* Cambia la altura para que sea dinámica */
+  text-align: center; /* Centra el texto */
+  padding: 1rem;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra los elementos horizontalmente */
+  justify-content: flex-start; /* Alinea los elementos al principio (arriba) */
+  margin-top: -2ch;
+}
+
+.feature h3 {
+  font-size: 1.6rem; /* Tamaño de fuente más grande */
+  margin-top: -0.5rem; /* Mover el título hacia arriba */
+  color: #284146; /* Asegura que el título sea legible */
+}
+
+.large-card:hover {
+  transform: translateY(-40px); /* Cuando se hace hover, la tarjeta sube aún más */
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2); /* Más sombra cuando se hace hover */
+}
+
+/* Cards pequeñas */
+.small-card {
+  flex: 1 1 200px; /* Las tarjetas pequeñas son aún más pequeñas */
+  transform: translateY(10px); /* Las tarjetas pequeñas se desplazan ligeramente hacia abajo */
+  border-radius: 60px; /* Bordes redondeados */
+  height: 320px; /* Establecemos una altura más baja para las tarjetas pequeñas */
+}
+
+.small-card:hover {
+  transform: translateY(-5px); /* Efecto hover, las tarjetas pequeñas se elevan un poco */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra al hacer hover */
+}
+
+/* Contenedor de las tarjetas */
+.card-container {
+  display: flex; /* Usamos flexbox para alinear las tarjetas */
+  justify-content: space-between; /* Las distribuye con espacio entre ellas */
+  gap: 20px; /* Espacio entre las tarjetas */
+}
+
+/* Estilo para las imágenes dentro de las tarjetas */
+.feature img {
+  max-width: 80px;
+  margin-bottom: 1rem;
+}
+
+/* Efecto hover para aumentar el tamaño de la imagen */
+.feature .bandabrazo {
+  /* Hacer que la imagen sea más grande pero no exceda un tamaño máximo */
+  max-width: 150px; /* Establece un tamaño máximo para la imagen */
+  width: 100%; /* La imagen ocupará el 100% del ancho disponible hasta el máximo */
+  height: auto; /* Mantiene las proporciones */
+  transition: transform 0.3s ease-in-out; /* Transición suave */
+}
+
+.feature:hover .bandabrazo {
+  transform: scale(1.09); /* Aumenta el tamaño de la imagen al 120% */
+}
+
+
+/* Efecto hover para aumentar el tamaño de la imagen */
+.feature .smartphone {
+  /* Hacer que la imagen sea más grande pero no exceda un tamaño máximo */
+  max-width: 150px; /* Establece un tamaño máximo para la imagen */
+  width: 100%; /* La imagen ocupará el 100% del ancho disponible hasta el máximo */
+  height: auto; /* Mantiene las proporciones */
+  transition: transform 0.3s ease-in-out; /* Transición suave */
+}
+
+.feature:hover .smartphone {
+  transform: scale(1.09); /* Aumenta el tamaño de la imagen al 120% */
+}
+
+
+/* Efecto hover para aumentar el tamaño de la imagen */
+.feature .logo {
+  /* Hacer que la imagen sea más grande pero no exceda un tamaño máximo */
+  max-width: 250px; /* Establece un tamaño máximo para la imagen */
+  width: 100%; /* La imagen ocupará el 100% del ancho disponible hasta el máximo */
+  height: auto; /* Mantiene las proporciones */
+  transition: transform 0.3s ease-in-out; /* Transición suave */
+}
+
+.feature:hover .logo {
+  transform: scale(1.1); /* Aumenta el tamaño de la imagen al 120% */
+}
+
+.feature h3 {
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.feature p {
+  font-size: 1rem;
+  color: #777;
+  margin-top: -2ch;
+}
+
+/* Card con icono */
+.card-icon {
+  margin-bottom: 1.5rem;
+}
+
+.card-icon img {
+  width: 40px;
+  height: 40px;
+}
+/* Contenedor de las cards */
+.contenedor-cards {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+  margin-bottom: 10%;
+}
+
+/* Card de fondo */
+.card-fondo {
+  background-color: #c8e2df; /* Color menta */
+  width: 90%;
+  padding: 40px;
+  height: 27ch;
+  border-radius: 35px;
+  text-align: center;
+  position: relative; /* Necesario para que el texto se posicione dentro */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Alinea el texto arriba */
+  text-align: center;
+}
+
+/* Texto de la card de fondo */
+.texto-fondo {
+  position: absolute;
+  top: -15px; /* Ajusta el texto más arriba */
+  left: 50%;
+  transform: translateX(-50%);
+  color: #284146;
+  font-size: 2.5em;
+  font-weight: 400;
+  font-family: "Montserrat", sans-serif; /* Aplicamos la fuente Montserrat */
+}
+
+/* Texto específico para "Vitalband" */
+.texto-naranja {
+  color: #f68037; /* Color naranja */
+  font-weight: 600; /* Negritas */
+}
+
+/* Card sobrepuesta */
+.card-superpuesta {
+  background-color: white;
+  width: 80%;
+  height: 22ch;
+  padding: 30px;
+  border-radius: 35px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.02);
+  position: absolute;
+  bottom: -50px; /* Hace que se vea un poco más abajo */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra los elementos */
+}
+
+.texto-card {
+  max-width: 70%; /* Limita el ancho del texto */
+  margin: 0 auto 20px auto; /* Centra el texto y agrega espacio debajo */
+  font-size: 1.2em;
+  font-weight: 500;
+  color: #284146;
+  font-family: tahoma;
+}
+
+
+/* Botón debajo del texto */
+.boton-card {
+  background-color: #ff8000; /* Color naranja */
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+/* Efecto hover del botón */
+.boton-card:hover {
+  background-color: #e66a00;
+}
+
+
+/* Sección de descarga */
+.seccion-descarga {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
+  max-width: 1200px;
+  margin: 50px auto;
+  margin-top: -40px;
+}
+
+/* Columnas */
+.columna {
+  flex: 1; /* Ambas columnas ocupan el mismo espacio */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Imagen animada */
+.imagen-animada {
+  width: 80%;
+  max-width: 400px;
+  margin: 0 auto;
+  animation: movimiento 2s infinite alternate ease-in-out;
+}
+
+/* Animación de la imagen */
+@keyframes movimiento {
+  from {
+      transform: translateY(0px);
+  }
+  to {
+      transform: translateY(-10px);
+  }
+}
+
+/* Columna derecha (Texto alineado a la derecha) */
+.derecha {
+  text-align: right;
+  padding-right: 40px;
+}
+
+/* Título */
+.titulo-descarga {
+  font-size: 3em;
+  font-weight: 500;
+  color: #284146;
+  font-family: "Montserrat", sans-serif; /* Aplicamos la fuente Montserrat */
+}
+
+/* Subtítulo */
+.subtitulo-descarga {
+  font-size: 1.2em;
+  margin: -10px 0 20px;
+  color: #555;
+}
+
+/* Botón */
+.boton-descarga {
+  background-color: #ff8000;
+  color: white;
+  border: none;
+  padding: 12px 20px; /* Reduces el padding horizontal */
+  border-radius: 25px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-bottom: 5ch;
+  width: fit-content; /* Ajusta el ancho según el contenido */
+  align-self: flex-end; /* Asegura que el botón no se estire */
+}
+
+/* Efecto hover */
+.boton-descarga:hover {
+  background-color: #e66a00;
+}
+
+/* Diseño responsivo */
+@media (max-width: 768px) {
+  .seccion-descarga {
+      flex-direction: column;
+      text-align: center;
+  }
+
+  .derecha {
+      text-align: center;
+      padding-right: 0;
+  }
+
+  .imagen-animada {
+      width: 60%;
+  }
+}
+
+
+/* Sección de descarga */
+.seccion-descarga {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
+  max-width: 1200px;
+  margin: 50px auto;
+}
+
+/* Columnas */
+.columna {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Columna izquierda (Animación centrada) */
+.izquierda {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px; /* Ajusta la altura para que se vea bien */
+}
+
+/* Animación (originalmente proporcionada) */
+.container {
+position: absolute; /* Posición absoluta dentro de la columna */
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%); /* Esto asegura que la animación esté centrada */
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+

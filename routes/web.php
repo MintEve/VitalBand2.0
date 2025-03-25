@@ -47,6 +47,11 @@ Route::get('/usuario', function () {
 
 Route::get('/grafica', function () {
     return view('grafica');
+})->name('grafica');
+
+
+Route::get('/mensaje', function () {
+    
 });
 
 
@@ -94,11 +99,11 @@ Route::get('/usuarios', function () {
                 'registros' => $registros
             ]);
 
-
-    } else {
-        // Redirigir a otra página si los datos son incorrectos
-        return 'ha ocurrido un error';
-    } 
+        } else {
+            // Redirigir a otra página si los datos son incorrectos
+            //eturn 'Usuario no encontrados';
+            return redirect()->back()->with('error', 'Esta cuenta no existe.');
+        } 
 });
 
 Route::get('/api/registros/{sVital}', function ($sVital) {
