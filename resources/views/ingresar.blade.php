@@ -2,83 +2,125 @@
 <html lang="es">
 <head>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ asset('css/ingresar.css') }}">
-    @include('components/navbar')
-    <title>Iniciar sesión</title>
+    <link rel="stylesheet" href="/css/ingresar.css">
+
+    <title>VitalBand - Iniciar Sesión</title>
+  
 </head>
 <body>
-    <div class="login-wrapper">
+    <a href="{{ route('inicio') }}" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+</button>
+
+    <div class="login-container">
         <!-- Sección de bienvenida -->
-        <div class="welcome-container">
-            <h2>¡Hola, Bienvenido!</h2>
-            <p>¿Eres nuevo en Vitalband?</p>
-            <button class="btn-register">Descarga la app</button>
+        <div class="welcome-section">
+            <div class="welcome-content">
+                <img src="{{ asset('images/vitalbandlogo.png') }}" alt="VitalBand Logo" class="logo">
+                <h2>Necesitas una cuenta?</h2>
+                <p>Desbloquea todas las funcionalidades de Vitalband descargando la App.</p>
+                <button class="btn-register">Descargar la App</button>
+            </div>
         </div>
-        <!-- Sección de inicio de sesión -->
-        <div class="login-container">
-            <h1>Iniciar sesión</h1>
-            @csrf
-            <input type="text" placeholder="Username" class="nombreUsuario" required>
-            <input type="password" placeholder="Contraseña" class="password" required>
-            <button type="submit" onclick="sendData()" class="btn-login">Entrar</button>
-            <p class="forgot-password">¿Olvidaste tu contraseña?</p>
+        
+        <!-- Sección de formulario -->
+        <div class="form-section">
+            <div class="form-container">
+                <h1>Iniciar sesión</h1>
+                @csrf
+                <div class="input-group">
+                    <i class="input-icon fas fa-user"></i>
+                    <input type="text" placeholder="Nombre de usuario" class="nombreUsuario" required>
+                </div>
+                <div class="input-group">
+                    <i class="input-icon fas fa-lock"></i>
+                    <input type="password" placeholder="Contraseña" class="password" id="passwordField" required>
+                    <i class="password-toggle fas fa-eye" id="togglePassword"></i>
+                </div>
+                <button type="submit" onclick="sendData()" class="btn-login">Entrar</button>
+            </div>
         </div>
     </div>
-    @include('components/footer')
-</body>
-</html>
 
-@if(session('error'))
-<script>
-     Swal.fire({
+    @if(session('error'))
+    <script>
+        Swal.fire({
             icon: 'error',
             title: '¡Error!',
             text: "{{ session('error') }}",
-            showConfirmButton: false,
-            timer: 2000
+            showConfirmButton: true,
         });
-</script>
-@endif
+    </script>
+    @endif
 
-<script>
-    function sendData() {
+    <script>
+        // Función para mostrar/ocultar contraseña
+        const togglePassword = document.querySelector('#togglePassword');
+        const passwordField = document.querySelector('#passwordField');
+        
+        togglePassword.addEventListener('click', function() {
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+            this.classList.toggle('fa-eye');
+        });
 
-        // input depositado en una variable 
-        const nombreUser = document.querySelector(".nombreUsuario").value
-        const contrasena = document.querySelector(".password").value
+        function sendData() {
+            const nombreUser = document.querySelector(".nombreUsuario").value;
+            const contrasena = document.querySelector(".password").value;
 
+            if (!nombreUser || !contrasena) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Campos vacíos',
+                    text: 'Por favor completa todos los campos',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                return;
+            }
 
-        // Aquí guardas los parámetros en la sesión usando JavaScript y un request AJAX
-        fetch('/set-parameters', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}', // Asegúrate de incluir el token CSRF
-            },
-            body: JSON.stringify({
-                param1: nombreUser, // se incertan las variables extraidas del input 
-                param2: contrasena
+            fetch('/set-parameters', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                body: JSON.stringify({
+                    param1: nombreUser,
+                    param2: contrasena
+                })
             })
-        })
-        .then((respuesta) => {
-
-            window.location.href = '{{ asset("/usuarios") }}'
-
-           // alert("hola");
-            // Redirigir después de guardar los parámetros en la sesión
-            //window.location.href = '{{ asset("/usuarios") }}';
-        });
-    }
-</script>
-
-
-<style>
- /* Aplica el box-sizing solo al navbar importado */
- * {
-            box-sizing: border-box;
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '{{ asset("/usuarios") }}';
+                } else {
+                    return response.json().then(err => { throw err; });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error.message || 'Error al iniciar sesión',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            });
         }
-</style>
 
-
+        // Permitir enviar con Enter
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendData();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

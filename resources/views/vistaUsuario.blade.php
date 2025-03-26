@@ -32,7 +32,7 @@
     <!-- Barra lateral -->
     <div class="sidebar bg-white w-64 px-4 py-8 shadow-lg flex flex-col">
         <div class="flex items-center justify-center mb-10">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
             </svg>
             <span class="ml-2 text-xl font-bold text-gray-800">VitalBand</span>
@@ -77,8 +77,7 @@
             <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
                 <h1 class="text-lg font-semibold text-gray-800">Registros y Gráficas de Signos Vitales</h1>
                 <div class="flex items-center space-x-4">
-                        <!-- Contenido principal 
-
+                        <!-- Contenido principal a
                     <div class="relative">
                         <input type="text" placeholder="Buscar..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -86,7 +85,9 @@
                         </svg>
                     </div>-->
                     <div class="flex items-center">
-                        <div class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
+                        <!-- Avatar con inicial -->
+                        <div class="flex-shrink-0 h-9 w-9 rounded-full bg-gradient-to-r from-blue-200 to-blue-500 flex items-center justify-center text-white font-semibold text-sm shadow-sm">
+                            {{ strtoupper(substr($nombreUser->nombreCompleto['nombres'][0], 0, 1)) }}
                         </div>
                         <span class="ml-2 text-sm font-medium text-gray-700">{{ $nombreUser->nombreCompleto['nombres'][0] }}
                             {{ $nombreUser->nombreCompleto['apellidoPaterno'] }} 

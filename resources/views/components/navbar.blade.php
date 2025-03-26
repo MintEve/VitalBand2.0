@@ -5,13 +5,14 @@
             <img src="{{ asset('images/vitalbandlogo.png') }}" alt="Logo" class="logo">
         </div>
         <div class="navbar-links">
-            <a href="{{ route('inicio') }}">Inicio</a>
-            <a href="{{ route('about') }}">Acerca de</a>
-            <a href="{{ route('nosotros') }}">Nosotros</a>
+            <a href="{{ route('inicio') }}" class="{{ Route::currentRouteName() == 'inicio' ? 'active' : '' }}">Inicio</a>
+            <a href="{{ route('about') }}" class="{{ Route::currentRouteName() == 'about' ? 'active' : '' }}">Acerca de</a>
+            <a href="{{ route('nosotros') }}" class="{{ Route::currentRouteName() == 'nosotros' ? 'active' : '' }}">Nosotros</a>
         </div>
+        <!-- BOTÓN DIRIGE A LOGIN -->
         <div class="navbar-register">
-            <a href="{{ route('ingresar') }}" class="registrarse">Regístrate</a>
-        </div>
+            <a href="{{ route('ingresar') }}" class="registrarse">Iniciar sesión</a>
+        </div> 
     </nav>
 </div>
 
@@ -53,14 +54,22 @@
 .navbar-links a {
     text-decoration: none; /* Elimina el subrayado de los enlaces */
     color: #333; /* Color del texto de los enlaces */
-    margin: 0 15px; /* Espaciado entre los enlaces */
+    margin: 0 25px; /* Espaciado entre los enlaces */
     font-size: 17px; /* Tamaño de fuente de los enlaces */
     font-weight: 500; /* Peso de la fuente para darle algo de énfasis */
 }
 
+
+/* Estilo para los enlaces activos */
+.navbar-links a.active {
+    color: #0093aa; /* El color que deseas para el enlace activo */
+    font-weight: 500; /* Puedes hacerlo más llamativo, por ejemplo, poniéndolo en negrita */
+    font-size: 17px;
+}
+
 /* Efecto hover para los enlaces del navbar */
 .navbar-links a:hover {
-    color: #146aa3; /* Cambia el color del texto cuando el cursor pasa sobre el enlace */
+    color: #136d7b; /* Cambia el color del texto cuando el cursor pasa sobre el enlace */
     text-decoration:underline; /* Agrega subrayado cuando se pasa el cursor */
     cursor: pointer; /* Cambia el cursor a una mano indicando que es clickeable */
 }
@@ -74,7 +83,7 @@
 /* Estilo para el botón "Regístrate" */
 .navbar-register a.registrarse {
     text-decoration: none; /* Elimina el subrayado */
-    background-color: #185b7c; /* Azul marino como color de fondo del botón */
+    background-color: #0b7c7c; /* Azul marino como color de fondo del botón */
     color: white; /* Color del texto del botón (blanco) */
     padding: 10px 20px; /* Relleno interior del botón (10px arriba/abajo, 20px a los lados) */
     border-radius: 5px; /* Esquinas redondeadas del botón */
@@ -85,7 +94,7 @@
 
 /* Efecto hover para el botón "Regístrate" */
 .navbar-register a.registrarse:hover {
-    background-color: #22b1b1; /* Cambia el color de fondo a turquesa cuando se pasa el cursor */
+    background-color: #0da7a7; /* Cambia el color de fondo a turquesa cuando se pasa el cursor */
     cursor: pointer; /* Cambia el cursor a una mano indicando que es clickeable */
 }
 

@@ -1,130 +1,243 @@
-/* Estilos generales */
-
-body {
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    background: #f1f1f1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
-    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Contenedor principal del login (ocupa toda la pantalla excepto el navbar) */
-.login-wrapper {
+body {
+    background: linear-gradient(135deg, #f5f9fa 0%, #e6f2f5 100%);
+    min-height: 100vh;
+    display: flex;
+    position: relative;
+}
+
+.back-button {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    background: rgba(232, 242, 243, 0.486);
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+    color: #005c62;
+    font-size: 1.3rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.733);
+    transform: translateX(-3px);
+}
+
+.login-container {
     display: flex;
     width: 100%;
-    max-width: 1200px;
-    height: calc(95vh - 60px); /* Restar la altura del navbar */
-    background: white;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 15px;
-    overflow: hidden;
-    margin-top: 30px; /* Para que no se solape con el navbar */
-    font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial, sans-serif; 
-
+    min-height: 100vh;
 }
 
-/* Lado izquierdo (Bienvenida) */
-.welcome-container {
-    background: #6b9dfc;
+.welcome-section {
+    flex: 1;
+    background: linear-gradient(135deg, #00b4b8 0%, #008a8f 100%);
     color: white;
-    padding: 50px;
-    text-align: center;
-    width: 40%;
+    padding: 3rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border-top-right-radius: 50%;
-    border-bottom-right-radius: 50%;
-    
-
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
 }
 
-.welcome-container h2 {
-    font-size: 28px;
-    margin-bottom: 10px;
+.welcome-section::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.welcome-section::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    left: -80px;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+    width: 150px;
+    margin-bottom: 2rem;
+    z-index: 2;
+}
+
+.welcome-content {
+    z-index: 2;
+    max-width: 500px;
+}
+
+.welcome-section h2 {
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.welcome-section p {
+    margin-bottom: 2.5rem;
+    opacity: 0.9;
+    font-size: 1.1rem;
+    line-height: 1.6;
 }
 
 .btn-register {
-    background: white;
-    color: #6b9dfc;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 25px;
-    font-size: 18px;
-    font-weight: bold;
+    background-color: transparent;
+    color: white;
+    border: 2px solid white;
+    padding: 0.9rem 2.5rem;
+    border-radius: 30px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background 0.3s ease-in-out;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    z-index: 2;
 }
 
 .btn-register:hover {
-    background: #ffffffcc;
+    background-color: white;
+    color: #008a8f;
 }
 
-/* Lado derecho (Formulario de Login) */
-.login-container {
-    padding: 50px;
-    width: 40%;
-    text-align: center;
+.form-section {
+    flex: 1;
+    padding: 3rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;  /* Centra verticalmente */
-    align-items: center;  /* Centra horizontalmente */
-    height: 70%;  /* Asegura que ocupe toda la altura del contenedor */
+    justify-content: center;
+    align-items: center;
+    background-color: white;
 }
 
-
-.login-container h1 {
-    font-size: 38px;
-    margin-bottom: 20px;
-    color: #5a8ce0;
+.form-container {
+    width: 100%;
+    max-width: 400px;
 }
 
-/* Campos de entrada */
-.login-container input {
-    width: 70%;
-    padding: 14px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
+.form-section h1 {
+    color: #007780;
+    margin-bottom: 2.5rem;
+    font-size: 3rem;
+    text-align: center;
+    font-weight: 600;
 }
 
-.login-container input:focus {
-    border-color: #6b9dfc;
+.input-group {
+    position: relative;
+    margin-bottom: 1.8rem;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #00b4b8;
+    font-size: 1.1rem;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 1.1rem 1rem 1.1rem 3rem;
+    border: 2px solid #e1e8eb;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
     outline: none;
 }
 
-/* Botón de inicio de sesión */
+.input-group input:focus {
+    border-color: #00b4b8;
+    box-shadow: 0 0 0 3px rgba(0, 180, 184, 0.2);
+}
+
+.password-toggle {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6b7280;
+    cursor: pointer;
+    font-size: 1.1rem;
+}
+
+.password-toggle:hover {
+    color: #00b4b8;
+}
+
 .btn-login {
-    width: 80%;
-    padding: 14px;
-    background-color: #6b9dfc;
+    background: linear-gradient(to right, #00b4b8, #008a8f);
     color: white;
     border: none;
-    border-radius: 8px;
-    font-size: 18px;
+    padding: 1.1rem;
+    border-radius: 10px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background 0.3s ease-in-out;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    width: 100%;
 }
 
 .btn-login:hover {
-    background-color: #5a8ce0;
+    background: linear-gradient(to right, #008a8f, #007780);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 120, 130, 0.2);
 }
 
-/* Enlace de contraseña */
 .forgot-password {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #6b9dfc;
+    text-align: center;
+    margin-top: 1.8rem;
+    color: #6b7280;
     cursor: pointer;
+    transition: color 0.3s ease;
+    font-size: 0.95rem;
 }
 
 .forgot-password:hover {
+    color: #00b4b8;
     text-decoration: underline;
 }
 
-
-
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+    }
+    
+    .welcome-section {
+        padding: 2rem 1.5rem;
+    }
+    
+    .form-section {
+        padding: 2rem 1.5rem;
+    }
+    
+    .back-button {
+        top: 15px;
+        left: 15px;
+        width: 40px;
+        height: 40px;
+    }
+}

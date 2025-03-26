@@ -41,9 +41,10 @@
 
 <style>
   /* Reset de estilos */
+     /* Reset de estilos */
 * {
 
-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 /* Estilos generales */

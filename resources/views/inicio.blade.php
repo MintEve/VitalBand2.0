@@ -11,11 +11,21 @@
     <link rel="stylesheet" href="{{ asset('css/inicio.css')}}">
     @include('components/navbar') <!-- Incluye la barra de navegación -->
 </head>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      // Esperamos un pequeño retraso para que se note la animación
+      setTimeout(() => {
+          document.querySelector(".hero").classList.add("show");
+      }, 200);
+  });
+</script>
+
 <body>
     <main>
+      @yield('content')
         <!-- INICIO "CONECTA. SIENTE. RINDE" -->
         <section class="hero">
-          <h1>Conecta. Siente. Rinde.</h1>
+          <h1>Conecta, siente, rinde.</h1>
           <p>Monitorea tu salud y mejora tu calidad de vida.</p>
         </section>
         <!-- CARDS DE INICIO -->
@@ -68,9 +78,25 @@
       </div>
   </section>
       </main>
+      @include('components.footer')
 </body>
-<footer>
-  @include('components/footer')
-
-</footer>
 </html>
+
+<style>
+  /* Inicialmente oculta y baja el texto */
+.hero h1,
+.hero p {
+    opacity: 0; /* Invisible */
+    transform: translateY(40px); /* Se mueve 40px hacia abajo */
+    transition: opacity 1.5s ease-out, transform 1.5s ease-out; /* Suavidad */
+}
+
+/* Cuando se agrega la clase 'show', aparece */
+.hero.show h1,
+.hero.show p {
+    opacity: 1; /* Aparece */
+    transform: translateY(0); /* Llega a su posición */
+}
+
+</style>
+
