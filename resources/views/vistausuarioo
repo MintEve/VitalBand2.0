@@ -188,7 +188,7 @@
                         onchange="cargarGrafica()" 
                         class="mt-1 block w-full pl-3 pr-10 py-3 text-base border-2 border-gray-300 focus:outline-none focus:ring-2
                          focus:ring-gray-500 focus:border-blue-500 sm:text-sm rounded-md shadow-md hover:border-blue-400 transition-all duration-200 cursor-pointer bg-blue font-medium">
-                      
+                         <option value="todos">Todos los signos vitales</option>
                          <option value="Cardiaca">Frecuencia Cardiaca</option>
                         <option value="Spo2">Oxigenación (SpO2)</option>
                         <option value="Temperatura">Temperatura</option>
@@ -199,7 +199,6 @@
             <div class="bg-white shadow rounded-lg p-6">
                 <h2 class="text-xl font-semibold text-gray-800 mb-4">Gráfica de Signos Vitales</h2>
 
-                    <!-- Selector de signo vital -->
 
                          
                 <!-- Contenedor de la gráfica -->
@@ -234,13 +233,14 @@
             let allChartData = []; // Para mantener todos los datos de la gráfica
 
             function obtenerUnidad(sVital) {
-                const unidades = {
-                    'Cardiaca': 'lpm',
-                    'Spo2': '%',
-                    'Temperatura': '°C'
-                };
-                return unidades[sVital] || '';
-            }
+    const unidades = {
+        'Cardiaca': 'lpm',
+        'Spo2': '%',
+        'Temperatura': '°C',
+        'todos': '' // Sin unidad cuando son todos
+    };
+    return unidades[sVital] || '';
+}
 
             function calcularTendencia(valores) {
                 if (valores.length < 2) return 0;
@@ -262,51 +262,185 @@
                 }
             }
 
-            async function cargarGrafica(page = 1) {
-                currentPage = page;
-                const sVital = document.getElementById('sVital').value;
-                currentSVital = sVital;
-                const unidad = obtenerUnidad(sVital);
+        
 
-                try {
-                    // Cargar datos para la tabla (paginados)
-                    const tableResponse = await fetch(`/api/registros/${sVital}?page=${currentPage}`);
-                    if (!tableResponse.ok) throw new Error('Error en la respuesta del servidor');
-                    
-                    const tableData = await tableResponse.json();
-                    if (!tableData.success) throw new Error(tableData.error);
+async function cargarGrafica(page = 1) {
+    currentPage = page;
+    const sVital = document.getElementById('sVital').value;
+    currentSVital = sVital;
+    const unidad = obtenerUnidad(sVital);
 
-                    // Cargar todos los datos para la gráfica (sin paginación)
-                    const chartResponse = await fetch(`/api/registros/${sVital}?all=true`);
-                    if (!chartResponse.ok) throw new Error('Error en la respuesta del servidor');
-                    
-                    const chartData = await chartResponse.json();
-                    if (!chartData.success) throw new Error(chartData.error);
+    try {
+        // Cargar datos para la tabla (paginados)
+        const tableResponse = await fetch(`/api/registros/${sVital}?page=${currentPage}`);
+        if (!tableResponse.ok) throw new Error('Error en la respuesta del servidor');
+        
+        const tableData = await tableResponse.json();
+        if (!tableData.success) throw new Error(tableData.error);
 
-                    // Actualizar controles de paginación
-                    totalPages = tableData.last_page;
-                    updatePaginationControls();
+        // Cargar todos los datos para la gráfica (sin paginación)
+        const chartResponse = await fetch(`/api/registros/${sVital}?all=true`);
+        if (!chartResponse.ok) throw new Error('Error en la respuesta del servidor');
+        
+        const chartData = await chartResponse.json();
+        if (!chartData.success) throw new Error(chartData.error);
 
-                    // Actualizar tabla con datos paginados
-                    updateTable(tableData.data);
+        // Actualizar controles de paginación
+        totalPages = tableData.last_page;
+        updatePaginationControls();
 
-                    // Procesar datos para la gráfica
-                    const fechas = chartData.data.map(registro => registro.fechaDeToma);
-                    const promedios = chartData.data.map(registro => registro.nivelRegistrado.promedio);
-                    const maximos = chartData.data.map(registro => registro.nivelRegistrado.maximo);
-                    const minimos = chartData.data.map(registro => registro.nivelRegistrado.minimo);
+        // Actualizar tabla con datos paginados
+        updateTable(tableData.data);
 
-                    // Actualizar información resumen
-                    updateSummaryInfo(promedios, unidad);
+        // Procesar datos para la gráfica
+        if (sVital === 'todos') {
+            renderAllSignsChart(chartData.data);
+        } else {
+            const fechas = chartData.data.map(registro => registro.fechaDeToma);
+            const promedios = chartData.data.map(registro => registro.nivelRegistrado.promedio);
+            const maximos = chartData.data.map(registro => registro.nivelRegistrado.maximo);
+            const minimos = chartData.data.map(registro => registro.nivelRegistrado.minimo);
 
-                    // Renderizar gráfica
-                    renderChart(fechas, promedios, maximos, minimos, sVital, unidad);
+            // Actualizar información resumen
+            updateSummaryInfo(promedios, unidad);
 
-                } catch (error) {
-                    console.error("Error al obtener los datos:", error);
-                    alert("Hubo un error al cargar los datos: " + error.message);
+            // Renderizar gráfica normal
+            renderChart(fechas, promedios, maximos, minimos, sVital, unidad);
+        }
+
+    } catch (error) {
+        console.error("Error al obtener los datos:", error);
+        alert("Hubo un error al cargar los datos: " + error.message);
+    }
+}
+
+// Nueva función para renderizar gráfica cuando se seleccionan todos los signos
+function renderAllSignsChart(data) {
+    const ctx = document.getElementById('graficaVitales').getContext('2d');
+    
+    if (chart) {
+        chart.destroy();
+    }
+
+    // Agrupar datos por tipo de signo vital y por fecha
+    const groupedByDate = {};
+    const allDates = new Set();
+    const signTypes = new Set();
+
+    // Primero recolectamos todas las fechas y tipos de signos
+    data.forEach(registro => {
+        allDates.add(registro.fechaDeToma);
+        signTypes.add(registro.sVital);
+    });
+
+    // Ordenar las fechas
+    const sortedDates = Array.from(allDates).sort((a, b) => new Date(a) - new Date(b));
+
+    // Inicializar la estructura para agrupar
+    sortedDates.forEach(date => {
+        groupedByDate[date] = {};
+        signTypes.forEach(type => {
+            groupedByDate[date][type] = null; // Inicializar como null
+        });
+    });
+
+    // Llenar con los datos reales
+    data.forEach(registro => {
+        groupedByDate[registro.fechaDeToma][registro.sVital] = registro.nivelRegistrado.promedio;
+    });
+
+    // Preparar datasets para la gráfica
+    const datasets = [];
+    const colors = {
+        'Cardiaca': 'rgba(239, 68, 68, 1)',
+        'Spo2': 'rgba(59, 130, 246, 1)',
+        'Temperatura': 'rgba(16, 185, 129, 1)'
+    };
+
+    Array.from(signTypes).forEach(sVital => {
+        const registrosForType = sortedDates.map(date => {
+            return groupedByDate[date][sVital];
+        });
+
+        datasets.push({
+            label: sVital === 'Cardiaca' ? 'Frecuencia Cardiaca' : 
+                  sVital === 'Spo2' ? 'Oxigenación' : 'Temperatura',
+            data: registrosForType,
+            backgroundColor: colors[sVital].replace('1)', '0.1)'),
+            borderColor: colors[sVital],
+            borderWidth: 2,
+            tension: 0.3,
+            fill: false,
+            spanGaps: true // Esto permite que la línea continúe incluso con datos faltantes
+        });
+    });
+
+    chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: sortedDates,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Comparación de Todos los Signos Vitales',
+                    font: {
+                        size: 16
+                    }
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            const value = context.parsed.y;
+                            if (value === null) return label + 'No hay dato';
+                            
+                            const sVital = context.dataset.label.includes('Cardiaca') ? 'Cardiaca' :
+                                           context.dataset.label.includes('Oxigenación') ? 'Spo2' : 'Temperatura';
+                            const unidad = obtenerUnidad(sVital);
+                            label += value + ' ' + unidad;
+                            return label;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: { 
+                    title: { 
+                        display: true, 
+                        text: 'Fecha',
+                        font: {
+                            weight: 'bold'
+                        }
+                    }
+                },
+                y: { 
+                    title: { 
+                        display: true, 
+                        text: 'Valor',
+                        font: {
+                            weight: 'bold'
+                        }
+                    }
                 }
             }
+        }
+    });
+
+    // Ocultar los summary info cuando se muestran todos
+    document.getElementById('ultimoRegistro').textContent = '--';
+    document.getElementById('promedioRegistro').textContent = '--';
+    document.getElementById('tendenciaRegistro').textContent = '--';
+}
 
             function updateSummaryInfo(promedios, unidad) {
                 document.getElementById('ultimoRegistro').textContent = 

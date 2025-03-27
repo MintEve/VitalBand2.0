@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -53,8 +54,6 @@ Route::get('/grafica', function () {
 Route::get('/mensaje', function () {
     
 });
-
-
 
 
 // esta guarda los datos en la sesion global de laravel
@@ -107,7 +106,7 @@ Route::get('/usuarios', function () {
 });
 
 
-Route::get('/api/registros/{sVital}', function ($sVital) {
+/* Route::get('/api/registros/{sVital}', function ($sVital) {
     $param1 = session('param1'); // Usuario autenticado
 
     $signosValidos = ['Spo2', 'Cardiaca', 'Temperatura']; 
@@ -115,6 +114,7 @@ Route::get('/api/registros/{sVital}', function ($sVital) {
         return response()->json(["error" => "Signo vital no válido"], 400);
     }
 
+    //API PARA MANDAR INFORMACIÓN A LA TABLA EN VISTA USUARIOS
     $registros = DB::connection('mongodb')->table('registros')
         ->where('userName', $param1)
         ->where('sVital', $sVital)
@@ -133,4 +133,58 @@ Route::get('/api/registros/{sVital}', function ($sVital) {
         });
 
     return response()->json($registros);
+});  */
+
+
+Route::get('/api/registros/{sVital}', function ($sVital) {
+    $param1 = session('param1');
+
+    try {
+        $query = DB::connection('mongodb')->table('registros')
+            ->where('userName', $param1)
+            ->where('sVital', $sVital)
+            ->orderBy('fechaDeToma', 'desc');
+
+
+        if (request()->has('all') && request()->get('all') == 'true') {
+            $registros = $query->get();
+        } else {
+            $page = request()->get('page', 1);
+            $perPage = 5;
+            $total = $query->count();
+            $registros = $query->skip(($page - 1) * $perPage)->take($perPage)->get();
+        }
+
+        $mappedData = $registros->map(function ($item) {
+            return [
+                'fechaDeToma' => $item->fechaDeToma,
+                'sVital' => $item->sVital,
+                'nivelRegistrado' => [
+                    'promedio' => $item->nivelRegistrado['promedio'],
+                    'maximo' => $item->nivelRegistrado['maximo'],
+                    'minimo' => $item->nivelRegistrado['minimo']
+                ]
+            ];
+        });
+
+        $response = [
+            'success' => true,
+            'data' => $mappedData
+        ];
+
+        if (!request()->has('all')) {
+            $response['total'] = $total;
+            $response['current_page'] = (int)$page;
+            $response['per_page'] = $perPage;
+            $response['last_page'] = ceil($total / $perPage);
+        }
+
+        return response()->json($response);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'error' => 'Error al obtener los datos: ' . $e->getMessage()
+        ], 500);
+    }
 });
